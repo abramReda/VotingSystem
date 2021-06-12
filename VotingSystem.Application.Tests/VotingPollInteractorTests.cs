@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VotingSystem.core;
 using VotingSystem.core.Models;
+using VotingSystem.Database;
 using Xunit;
 
 namespace VotingSystem.Application.Tests
@@ -21,22 +22,22 @@ namespace VotingSystem.Application.Tests
             _interactor = new VotingPollInteractor(_mockFactory.Object, _mockPresistance.Object); ;
         }
         [Fact]
-        public void CreateVotingPoll_UsesVotingPollFactoryToCreateVotingPoll()
+        public async Task CreateVotingPoll_UsesVotingPollFactoryToCreateVotingPoll()
         {
-            _interactor.CreateVotingPoll(_request);
+            await _interactor.CreateVotingPollAsync(_request);
 
             _mockFactory.Verify(x => x.CreatePoll(_request));
         }
 
         [Fact]
-        public void CreateVotingPoll_PersistsCreatedPoll()
+        public async Task CreateVotingPoll_PersistsCreatedPoll()
         {
             var poll = new VotingPoll();
             _mockFactory.Setup(x => x.CreatePoll(_request)).Returns(poll);
             
-            _interactor.CreateVotingPoll(_request);
+            await _interactor.CreateVotingPollAsync(_request);
 
-            _mockPresistance.Verify(x => x.SaveVotingPoll(poll));
+            _mockPresistance.Verify(x => x.SaveVotingPollAsync(poll));
         }
 
     }

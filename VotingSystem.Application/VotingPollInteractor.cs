@@ -1,5 +1,7 @@
-﻿using VotingSystem.core;
+﻿using System.Threading.Tasks;
+using VotingSystem.core;
 using VotingSystem.core.Models;
+using VotingSystem.Database;
 
 namespace VotingSystem.Application
 {
@@ -14,10 +16,10 @@ namespace VotingSystem.Application
             _presistance = presistance;
         }
 
-        public VotingPoll CreateVotingPoll(VotingPollCreationRequest request)
+        public async Task<VotingPoll> CreateVotingPollAsync(VotingPollCreationRequest request)
         {
             var poll = _factory.CreatePoll(request);
-            _presistance.SaveVotingPoll(poll);
+            await _presistance.SaveVotingPollAsync(poll);
             return poll;
         }
     }
